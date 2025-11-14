@@ -42,7 +42,9 @@ export default async function ProjectRepoPage({
       </div>
 
       <ProjectToolbar
-        branchName={project.defaultBranch}
+        projectSlug={project.slug}
+        variants={project.variants}
+        baseVariantId={project.baseVariantId}
         pathChain={[project.slug]}
       />
 

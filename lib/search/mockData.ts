@@ -1,11 +1,41 @@
 // lib/search/mockData.ts
-// lib/search/mockData.ts
 import type { SearchEntity, EntityHeader } from "./types";
+import { getOrg } from "@/lib/data/orgs";
+
+function buildEntityFromOrg(
+  id: string,
+  handle: string,
+  extra: Pick<
+    EntityHeader,
+    "type" | "verified" | "subtitle" | "logoUrl" | "description" | "socials" | "meta" | "stats"
+  >,
+): EntityHeader {
+  const org = getOrg(handle);
+  if (!org) {
+    throw new Error(`Org "${handle}" not found for entity "${id}"`);
+  }
+
+  return {
+    id,
+    name: org.displayName,
+    type: extra.type,
+    verified: extra.verified,
+    subtitle: extra.subtitle,
+    logoUrl: extra.logoUrl,
+    description: extra.description ?? org.bio,
+    socials: extra.socials ?? {
+      website: org.socials?.website ?? org.website,
+      twitter: org.socials?.twitter,
+      instagram: org.socials?.instagram,
+      linkedin: org.socials?.linkedin,
+    },
+    meta: extra.meta,
+    stats: extra.stats,
+  };
+}
 
 export const ENTITIES: Record<string, EntityHeader> = {
-  "ent-apple": {
-    id: "ent-apple",
-    name: "Apple",
+  "ent-apple": buildEntityFromOrg("ent-apple", "apple", {
     type: "company",
     verified: true,
     subtitle: "apple.com",
@@ -20,10 +50,9 @@ export const ENTITIES: Record<string, EntityHeader> = {
     },
     meta: { hq: "Cupertino, CA", founded: 1976, focus: "Consumer electronics", size: "160k+" },
     stats: { products: 120, repos: 38, followers: 20000000, stars: 120000 },
-  },
-  "ent-omnitudedesign": {
-    id: "ent-omnitudedesign",
-    name: "OmnitudeDesign",
+  }),
+
+  "ent-omnitudedesign": buildEntityFromOrg("ent-omnitudedesign", "omnitudedesign", {
     type: "company",
     verified: true,
     subtitle: "omnitudedesign.com",
@@ -38,10 +67,9 @@ export const ENTITIES: Record<string, EntityHeader> = {
     },
     meta: { hq: "Roosendaal, NL", founded: 2025, focus: "Fashion & Design", size: "1-10" },
     stats: { products: 2, repos: 4, followers: 9000, stars: 1000 },
-  },
-  "ent-raspberry": {
-    id: "ent-raspberry",
-    name: "Raspberry Pi Ltd.",
+  }),
+
+  "ent-raspberry": buildEntityFromOrg("ent-raspberry", "raspberrypi", {
     type: "company",
     verified: true,
     subtitle: "raspberrypi.com",
@@ -56,63 +84,51 @@ export const ENTITIES: Record<string, EntityHeader> = {
     },
     meta: { hq: "Cambridge, UK", founded: 2012, focus: "SBCs & modules", size: "500+" },
     stats: { products: 25, repos: 60, followers: 1800000, stars: 64000 },
-  },
+  }),
 
-    "ent-metalex": {
-    id: "ent-metalex",
-    name: "Metalex Limited",
-    type: "company",
-    verified: false,
-    subtitle: "metalex.co.uk",
-    logoUrl: "/Raspberry Pi Foundation_idwbF1-REU_0.jpeg",
-    description:
-      "Raspberry Pi Ltd. designs and sells low-cost, high-performance single-board computers for education, makers, and industry.",
-    socials: {
-      website: "https://raspberrypi.com",
-      twitter: "https://twitter.com/raspberrypi",
-      instagram: "https://instagram.com/raspberrypi",
-      linkedin: "https://www.linkedin.com/company/raspberrypi",
-    },
-    meta: { hq: "Cambridge, UK", founded: 2012, focus: "SBCs & modules", size: "500+" },
-    stats: { products: 25, repos: 60, followers: 1800000, stars: 64000 },
-  },
-
-    "ent-iso": {
-    id: "ent-iso",
-    name: "ISO",
+  "ent-iso": buildEntityFromOrg("ent-iso", "iso", {
     type: "organisation",
     verified: true,
     subtitle: "iso.org",
     logoUrl: "/images/logos/Icon.jpeg",
     description:
-      "The International Organization for Standardization is an independent, non-governmental, international standard development organization composed of representatives from the national standards organizations of member countries.[4][5]",
+      "The International Organization for Standardization is an independent, non-governmental, international standard development organization composed of representatives from the national standards organizations of member countries.",
     socials: {
       website: "https://iso.org",
       twitter: "https://twitter.com/isostandards",
       instagram: "https://www.instagram.com/isostandards",
       linkedin: "https://www.linkedin.com/company/isostandards",
     },
-    meta: { hq: "Geneva, CH", founded: 1947, focus: "International standards development", size: "150-200" },
-    stats: { products: 0, repos: 1800, followers: 20000, stars: 14000 },
-  },
-      "ent-aluminum_association": {
-    id: "ent-aluminum_association",
-    name: "Aluminum Association",
-    type: "organisation",
-    verified: true,
-    subtitle: "aluminum.com",
-    logoUrl: "/images/logos/AA.webp",
-    description:
-      "Through the work of our standards team and the Technical Committee on Product Standards (TCPS), the association serves as the major standard setting organization for the global aluminum industry. This includes registering new aluminum alloys and products, managing and updating publications, and more.",
-    socials: {
-      website: "https://aluminum.org",
-      twitter: "https://twitter.com/AluminumNews",
-      instagram: "http://www.instagram.com/aluminumnews",
-      linkedin: "https://www.linkedin.com/company/the-aluminum-association",
+    meta: {
+      hq: "Geneva, CH",
+      founded: 1947,
+      focus: "International standards development",
+      size: "150-200",
     },
-    meta: { hq: "Arlington, VA", founded: 1935, focus: "Aluminum", size: "10-30" },
-    stats: { products: 0, repos: 12, followers: 2000, stars: 200 },
-  },
+    stats: { products: 0, repos: 1800, followers: 20000, stars: 14000 },
+  }),
+
+  "ent-aluminum_association": buildEntityFromOrg(
+    "ent-aluminum_association",
+    "aluminumassociation",
+    {
+      type: "organisation",
+      verified: true,
+      subtitle: "aluminum.com",
+      logoUrl: "/images/logos/AA.webp",
+      description:
+        "Through the work of our standards team and the Technical Committee on Product Standards (TCPS), the association serves as the major standard setting organization for the global aluminum industry. This includes registering new aluminum alloys and products, managing and updating publications, and more.",
+      socials: {
+        website: "https://aluminum.org",
+        twitter: "https://twitter.com/AluminumNews",
+        instagram: "http://www.instagram.com/aluminumnews",
+        linkedin: "https://www.linkedin.com/company/the-aluminum-association",
+      },
+      meta: { hq: "Arlington, VA", founded: 1935, focus: "Aluminum", size: "10-30" },
+      stats: { products: 0, repos: 12, followers: 2000, stars: 200 },
+    },
+  ),
+
   "@lucasveenman": {
     id: "@lucasveenman",
     name: "Lucas Veenman",
@@ -125,9 +141,8 @@ export const ENTITIES: Record<string, EntityHeader> = {
 };
 
 export const MOCK_DATA: SearchEntity[] = [
-
   // Standards
-    {
+  {
     id: "iso/iso-7380-1:2022",
     title: "ISO-7380-1:2022",
     subtitle: "Button Head Screws • Hexagon Socket",
@@ -138,23 +153,21 @@ export const MOCK_DATA: SearchEntity[] = [
     updatedAt: "2022-10-01T12:00:00Z",
     rawItem: { type: "standard" },
     stars: 21,
-    images: [
-    ],
+    images: [],
   },
 
   {
     id: "aluminumassociation/6061-t6",
     title: "Aluminum 6061-T6",
-    subtitle: "Aluminum • 6061-T6 • Material ",
-    href: "/iso/iso-7380-1:2022",
+    subtitle: "Aluminum • 6061-T6 • Material",
+    href: "/aluminumassociation/material/6061-t6",
     scope: "standards",
     entity: ENTITIES["ent-aluminum_association"],
     tags: ["aluminum", "material", "standards"],
     updatedAt: "2023-10-01T12:00:00Z",
     rawItem: { type: "standard" },
     stars: 22,
-    images: [
-    ],
+    images: [],
   },
 
   // Products
@@ -169,9 +182,7 @@ export const MOCK_DATA: SearchEntity[] = [
     updatedAt: "2025-02-10T12:00:00Z",
     rawItem: { type: "product" },
     stars: 1864,
-    images: [
-      "/images/products/iphone-15-pro.png",
-    ],
+    images: ["/images/products/iphone-15-pro.png"],
   },
   {
     id: "prd-pi5",
@@ -184,18 +195,11 @@ export const MOCK_DATA: SearchEntity[] = [
     updatedAt: "2025-01-01T12:00:00Z",
     rawItem: { type: "product" },
     stars: 2210,
-    images: [
-      "/images/products/raspberrypi-5.png",
-    ],
+    images: ["/images/products/raspberrypi-5.png"],
   },
 
-  // Components
-
-  // Materials
-
   // Projects
-
-    {
+  {
     id: "opensource-glasess",
     title: "OS-Glasess",
     subtitle: "Open product repo",
@@ -206,8 +210,6 @@ export const MOCK_DATA: SearchEntity[] = [
     updatedAt: "2025-10-01T12:00:00Z",
     rawItem: { type: "project" },
     stars: 58,
-    images: [
-      "/images/products/glasess.png",
-    ],
+    images: ["/images/products/glasess.png"],
   },
 ];

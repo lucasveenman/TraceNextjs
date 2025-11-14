@@ -23,7 +23,7 @@ export function RepoShell({
 }) {
   return (
     <div className="w-full">
-      <OrgHeader owner={owner} repo={repo} socials={socials} />
+      <OrgHeader owner={owner} repo={repo} type="project" socials={socials} />
       <ProjectNav owner={owner} repo={repo} />
       <section className="mx-auto w-full max-w-7xl px-4 py-6">
         {children}

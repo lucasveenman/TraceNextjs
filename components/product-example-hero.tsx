@@ -78,7 +78,7 @@ export function ProductExampleHero() {
   );
 
   return (
-    <section className="w-full">
+    <section className="w-full border-t">
       <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-8 px-4 py-12 lg:grid-cols-12 lg:items-center lg:py-16">
         <motion.div
           initial={{ opacity: 0, y: 12 }}

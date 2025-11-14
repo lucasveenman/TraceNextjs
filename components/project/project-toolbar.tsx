@@ -1,4 +1,4 @@
-//components/project/project-toolbar.tsx
+// components/project/project-toolbar.tsx
 "use client";
 
 import { useState } from "react";
@@ -10,9 +10,22 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import type { ProjectVariant } from "@/lib/data/projects";
 
-export function ProjectToolbar({ branchName, pathChain }: { branchName: string; pathChain: string[] }) {
-  const [branch, setBranch] = useState(branchName);
+export function ProjectToolbar({
+  projectSlug,
+  variants,
+  baseVariantId,
+  pathChain,
+}: {
+  projectSlug: string;
+  variants: ProjectVariant[];
+  baseVariantId: string;
+  pathChain: string[];
+}) {
+  const [selectedId, setSelectedId] = useState<string>(baseVariantId);
+  const selected =
+    variants.find((v) => v.id === selectedId) ?? variants[0];
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-3">
@@ -20,14 +33,23 @@ export function ProjectToolbar({ branchName, pathChain }: { branchName: string; 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm" className="gap-2">
-              <GitBranch className="h-4 w-4" /> {branch}
+              <GitBranch className="h-4 w-4" />
+              {selected?.label}
               <ChevronDown className="h-3.5 w-3.5" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" className="w-56">
-            {["iphone-15", "iphone-15-pro", "iphone-15-pro-max", "prototype-15231", "prototype-15232" ].map((b) => (
-              <DropdownMenuItem key={b} onClick={() => setBranch(b)}>
-                {b}
+            {variants.map((v) => (
+              <DropdownMenuItem
+                key={v.id}
+                onClick={() => setSelectedId(v.id)}
+              >
+                <div className="flex flex-col">
+                  <span>{v.label}</span>
+                  <span className="text-[10px] uppercase text-muted-foreground">
+                    {v.kind}
+                  </span>
+                </div>
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>
@@ -45,7 +67,9 @@ export function ProjectToolbar({ branchName, pathChain }: { branchName: string; 
         <Button size="sm" variant="outline" className="gap-2">
           <Plus className="h-4 w-4" /> Add file
         </Button>
-        <Button size="sm" className="gap-2">Share</Button>
+        <Button size="sm" className="gap-2">
+          Share
+        </Button>
       </div>
     </div>
   );

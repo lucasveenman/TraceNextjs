@@ -1,37 +1,39 @@
+// components/org/org-readme.tsx
 "use client";
 
+import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { OrgData } from "@/lib/data/orgs";
 
-export function OrgReadme({
-  org,
-}: {
-  org: {
-    readme: {
-      title: string;
-      body: string[];
-      badges?: string[];
-      links?: { label: string; href: string }[];
-    };
-  };
-}) {
+export function OrgReadme({ org }: { org: OrgData }) {
   const { readme } = org;
 
+  
   return (
     <Card>
       <CardHeader>
-        <div className="text-xs text-muted-foreground">README.md</div>
         <CardTitle className="mt-2">{readme.title}</CardTitle>
       </CardHeader>
       <CardContent className="max-w-none text-sm">
         <div className="mb-6 flex justify-center">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full border bg-muted">
-            {/* logo placeholder */}
-            <div className="h-8 w-8 rounded-full border" />
+          <div className="flex h-16 w-16 items-center justify-center">
+            {org.logoUrl ? (
+              <div className="relative h-12 w-12 overflow-hidden rounded-lg">
+                <Image
+                  src={org.logoUrl}
+                  alt={org.displayName}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            ) : (
+              <div className="h-8 w-8 rounded-full" />
+            )}
           </div>
         </div>
 
         {readme.body.map((p, i) => (
-          <p key={i} className="mb-3">
+          <p key={i} className="mb-3 text-muted-foreground">
             {p}
           </p>
         ))}
@@ -39,7 +41,12 @@ export function OrgReadme({
         {readme.badges && readme.badges.length > 0 && (
           <div className="mb-4 flex flex-wrap gap-2">
             {readme.badges.map((b) => (
-              <span key={b} className="rounded border px-2 py-0.5 text-xs">{b}</span>
+              <span
+                key={b}
+                className="rounded-full border px-2 py-0.5 text-xs text-muted-foreground"
+              >
+                {b}
+              </span>
             ))}
           </div>
         )}

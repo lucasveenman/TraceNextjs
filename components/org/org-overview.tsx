@@ -7,30 +7,59 @@ import type { OrgData } from "@/lib/data/orgs";
 import { buildRepoHref } from "@/lib/data/orgs";
 
 export function OrgOverview({ org }: { org: OrgData }) {
+  const hasPinned = org.pinnedRepos.length > 0;
+
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
       <div className="lg:col-span-2 space-y-8">
         <OrgReadme org={org} />
+
         <section>
-          <h2 className="mb-3 text-sm font-semibold text-muted-foreground">Pinned</h2>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {org.pinnedRepos.map((r) => (
-              <a
-                key={r.name}
-                href={buildRepoHref(org.handle, r)}
-                className="block rounded-lg border p-4 hover:bg-muted/40"
-              >
-                <div className="text-sm font-semibold">{org.handle} / {r.name}</div>
-                {r.description && (
-                  <p className="mt-1 text-sm text-muted-foreground">{r.description}</p>
-                )}
-                <div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground">
-                  <span>★ {r.stars ?? 0}</span>
-                  {r.updatedAt && <span>Updated {timeAgo(r.updatedAt)}</span>}
-                </div>
-              </a>
-            ))}
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="text-sm font-semibold text-muted-foreground">Pinned repositories</h2>
+            {hasPinned && (
+              <span className="text-xs text-muted-foreground">
+                {org.pinnedRepos.length} public
+              </span>
+            )}
           </div>
+
+          {hasPinned ? (
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              {org.pinnedRepos.map((r) => (
+                <a
+                  key={r.name}
+                  href={buildRepoHref(org.handle, r)}
+                  className="block rounded-xl border bg-card/40 p-4 transition hover:bg-muted/50"
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="text-sm font-semibold truncate">
+                      {org.handle} / {r.name}
+                    </div>
+                    <span className="rounded-full border px-2 py-0.5 text-[10px] leading-none capitalize text-muted-foreground">
+                      {r.type}
+                    </span>
+                  </div>
+
+                  {r.description && (
+                    <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
+                      {r.description}
+                    </p>
+                  )}
+
+                  <div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground">
+                    <span>★ {r.stars ?? 0}</span>
+                    {r.updatedAt && <span>Updated {timeAgo(r.updatedAt)}</span>}
+                  </div>
+                </a>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-xl border border-dashed px-4 py-6 text-sm text-muted-foreground">
+              No pinned repositories yet. Pin a project, product, material, process or standard to
+              feature it here.
+            </div>
+          )}
         </section>
       </div>
 
