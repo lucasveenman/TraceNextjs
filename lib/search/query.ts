@@ -36,7 +36,7 @@ function baseStringScore(n: string, t: string, sub: string) {
 /**
  * Score an item by its own title/subtitle, then (slightly lower weight) by
  * its entity header (entity.name / entity.subtitle). This lets queries for
- * "Apple" match both the Apple company page and products owned by Apple.
+ * "Apple" match both the Apple entity page and products owned by Apple.
  */
 function score(q: string, e: SearchEntity) {
   const n = normalize(q);
@@ -59,41 +59,36 @@ function score(q: string, e: SearchEntity) {
   return Math.max(itemScore, entityScore);
 }
 
-/* --------------------------- synthetic companies --------------------------- */
-
+/* --------------------------- synthetic entities --------------------------- */
 /**
- * Produce synthetic company SearchEntity items from ENTITIES when:
- * - entity.type === "company"
- * - there is no existing companies item for that entity already in MOCK_DATA
- *
- * This makes companies like "Apple" directly discoverable by name.
+ * Create discoverable "entity" items (companies/organisations/users) from ENTITIES
+ * when they don't already exist in the index as entity-scoped items.
  */
-function synthesizeCompaniesIndex(
+function synthesizeEntitiesIndex(
   entities: Record<string, EntityHeader>,
   existing: SearchEntity[]
 ): SearchEntity[] {
-  const existingCompanyEntityIds = new Set(
+  const existingEntityIds = new Set(
     existing
-      .filter((e) => e.scope === "companies" && e.entity?.id)
+      .filter((e) => e.scope === "entities" && e.entity?.id)
       .map((e) => e.entity!.id!)
   );
 
   const out: SearchEntity[] = [];
   for (const eh of Object.values(entities)) {
-    if (eh.type !== "company") continue; // never synthesize users
-    if (existingCompanyEntityIds.has(eh.id)) continue; // already has a page
+    if (!eh.id || existingEntityIds.has(eh.id)) continue;
 
     out.push({
-      id: `co-${eh.id}`,
+      id: `ent-${eh.id}`,
       title: eh.name,
-      subtitle: eh.subtitle || "", // domain or strapline if present
-      href: `/companies/${slugify(eh.name)}`,
-      scope: "companies",
+      subtitle: eh.subtitle || "",
+      href: `/${slugify(eh.name)}`,
+      scope: "entities",
       entity: eh,
-      tags: ["company"],
-      // optional: place far in the past so "recent" sort prefers real data
+      tags: [eh.type || "entity"],
+      // Put far in the past so "recent" sort favors real data
       updatedAt: "2000-01-01T00:00:00Z",
-      rawItem: { type: "company" },
+      rawItem: { type: "entity" },
     });
   }
   return out;
@@ -103,7 +98,7 @@ function synthesizeCompaniesIndex(
 
 const INDEX: SearchEntity[] = [
   ...MOCK_DATA,
-  ...synthesizeCompaniesIndex(ENTITIES, MOCK_DATA),
+  ...synthesizeEntitiesIndex(ENTITIES, MOCK_DATA),
 ];
 
 /* --------------------------------- search --------------------------------- */
@@ -134,7 +129,14 @@ export function searchLocal({
 
   const filtered: ScoredEntity[] = INDEX
     .filter((e) => {
-      if (scope !== "all" && e.scope !== scope) return false;
+      if (scope !== "all") {
+        // Special view: components are *products* with role === "component"
+        if (scope === "components") {
+          if (e.scope !== "products") return false;
+          return e.rawItem?.role === "component";
+        }
+        if (e.scope !== scope) return false;
+      }
       if (role && e.rawItem?.role && e.rawItem.role !== role) return false;
       return true;
     })
@@ -178,13 +180,22 @@ export function searchLocal({
 export function countByScope(all: SearchEntity[] = []) {
   const counts: Record<Scope | "all", number> = {
     all: all.length,
-    repos: 0,
+    standards: 0,
     materials: 0,
-    components: 0,
+    components: 0, // derived from products w/ role === "component"
     products: 0,
-    companies: 0,
-    suppliers: 0,
+    projects: 0,
+    processes: 0,
+    entities: 0,
   };
-  for (const e of all) counts[e.scope]++;
+
+  for (const e of all) {
+    if (e.scope === "products" && e.rawItem?.role === "component") {
+      counts.components += 1;
+      continue;
+    }
+    counts[e.scope] = (counts[e.scope] || 0) + 1;
+  }
+
   return counts;
 }

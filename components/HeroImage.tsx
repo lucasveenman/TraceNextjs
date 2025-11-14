@@ -79,8 +79,8 @@ type Props = {
 // ---------- Assembly/image wiring ----------
 const PRODUCT = "FUYU_FSK40_LG";
 const partImg = (folder: string) => ({
-  color: `/images/${PRODUCT}/${folder}/${folder}.png`,
-  depth: `/images/${PRODUCT}/${folder}/${folder}_depth.png`,
+  color: `/images/landing/${PRODUCT}/${folder}/${folder}.png`,
+  depth: `/images/landing/${PRODUCT}/${folder}/${folder}_depth.png`,
 });
 
 const PIECES: PieceDef[] = [
@@ -88,7 +88,7 @@ const PIECES: PieceDef[] = [
   { name: "iso7380-m6x25-t30", title: "Button Head Screw ISO 7380 M6×25 T30", partNumber: "ISO7380-M6-1.0X25-T30", company: "BoltCo", ...partImg("ISO 7380 M6-1.0X25__ T30 TORX"), url: "", origin: "supplierStd", supplierOrg: "boltco", standardSpec: "m6x25-iso7380-t30" },
 
     // External OEMs -> /<org>/<repo>
-  { name: "ballscrew", title: "Ballscrew C7 10mm", partNumber: "BALLSCREW", company: "PrecisionDrive", color: `/images/${PRODUCT}/ballscrew/ballscrew_masked.png`, depth: `/images/${PRODUCT}/ballscrew/ballscrew_masked_depth.png`, url: "", origin: "oem", specs: { type: "C7", pitch_mm: 10 } },
+  { name: "ballscrew", title: "Ballscrew C7 10mm", partNumber: "BALLSCREW", company: "PrecisionDrive", color: `/images/landing/${PRODUCT}/ballscrew/ballscrew_masked.png`, depth: `/images/landing/${PRODUCT}/ballscrew/ballscrew_masked_depth.png`, url: "", origin: "oem", specs: { type: "C7", pitch_mm: 10 } },
   { name: "rail", title: "Linear Guide Rail MGNR15 • 1100mm", partNumber: "MGNR15R110CM-Rail", company: "RailCore", ...partImg("MGNR15R110CM-Rail"), url: "", origin: "oem", specs: { width_mm: 15, length_mm: 1100, material: "Stainless" } },
 
   // FUYU generic library parts (not build-specific)

@@ -1,3 +1,4 @@
+//components/project/project-toolbar.tsx
 "use client";
 
 import { useState } from "react";
@@ -10,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export function RepoToolbar({ branchName, pathChain }: { branchName: string; pathChain: string[] }) {
+export function ProjectToolbar({ branchName, pathChain }: { branchName: string; pathChain: string[] }) {
   const [branch, setBranch] = useState(branchName);
 
   return (
@@ -24,7 +25,7 @@ export function RepoToolbar({ branchName, pathChain }: { branchName: string; pat
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" className="w-56">
-            {["main", "dev", "prototype"].map((b) => (
+            {["iphone-15", "iphone-15-pro", "iphone-15-pro-max", "prototype-15231", "prototype-15232" ].map((b) => (
               <DropdownMenuItem key={b} onClick={() => setBranch(b)}>
                 {b}
               </DropdownMenuItem>
@@ -44,7 +45,7 @@ export function RepoToolbar({ branchName, pathChain }: { branchName: string; pat
         <Button size="sm" variant="outline" className="gap-2">
           <Plus className="h-4 w-4" /> Add file
         </Button>
-        <Button size="sm" className="gap-2">Code</Button>
+        <Button size="sm" className="gap-2">Share</Button>
       </div>
     </div>
   );

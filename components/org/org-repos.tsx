@@ -1,8 +1,8 @@
 // components/org/org-repos.tsx
 "use client";
 
-import { RepoCard } from "./repo-card";
-import type { TypedRepo } from "@/app/orgs/[owner]/repositories/page";
+import { RepoCard } from "./artefact-card";
+import type { TypedRepo } from "@/lib/data/orgs";
 
 type Buckets = {
   project: TypedRepo[];
@@ -36,7 +36,7 @@ export function OrgRepos({
   };
 
   for (const r of repos) {
-    buckets[r.type].push(r);
+    buckets[r.type as keyof Buckets].push(r);
   }
 
   const order: (keyof Buckets)[] = ["project", "product", "material", "standard", "process"];
@@ -44,7 +44,7 @@ export function OrgRepos({
 
   return (
     <div id="repositories" className="space-y-10">
-      <div className="mb-2 flex items-center justify-between">
+      <div className="mb-3 flex items-center justify-between">
         <h2 className="text-sm font-semibold text-muted-foreground">Repositories</h2>
         <div className="text-xs text-muted-foreground">{total} public</div>
       </div>
@@ -70,3 +70,4 @@ export function OrgRepos({
     </div>
   );
 }
+

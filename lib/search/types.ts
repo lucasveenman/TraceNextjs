@@ -1,10 +1,10 @@
 // lib/search/types.ts
 import type { ComponentType } from "react";
-import { ScrollText, Layers, Puzzle, Package, Building2, FolderGit2  } from "lucide-react";
+import { ScrollText, Layers, Puzzle, Package, Building2, Orbit, FolderGit2  } from "lucide-react";
 
-export type Scope = "standards" | "materials" | "components" | "products" | "companies" | "suppliers";
-export type EntityKind = "company" | "standards" | "user";
-export type ItemKind = "standards" | "material" | "component" | "product" | "company" | "supplier";
+export type Scope = "standards" | "materials" | "components" | "products" | "projects" | "processes" | "entities";
+export type EntityKind = "company" | "organisation" | "user";
+export type ItemKind = "standard" | "material" | "product" | "project" | "process" | "entity";
 
 export type EntityHeader = {
   id: string;
@@ -43,10 +43,7 @@ export type SearchEntity = {
   entity?: EntityHeader;
   tags?: string[];
   updatedAt?: string;
-  rawItem?: {
-    type?: ItemKind;
-    role?: string;
-  };
+  rawItem?: { type?: ItemKind; role?: string } // e.g. role: "component" ;
   stars?: number;
   specs?: { label: string; value: string }[];
   badges?: string[];
@@ -65,5 +62,6 @@ export const SCOPES_FOR_UI: Array<{
   { key: "components", label: "Components", icon: Puzzle },
   { key: "products", label: "Products", icon: Package },
   { key: "projects", label: "Projects", icon: FolderGit2 },
-  { key: "companies", label: "Companies", icon: Building2 },
+  { key: "processes", label: "Processes", icon: Orbit },
+  { key: "entities", label: "Entity", icon: Building2 },
 ];

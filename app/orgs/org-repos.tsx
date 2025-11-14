@@ -1,8 +1,8 @@
 // components/org/org-repos.tsx
 "use client";
 
-import { RepoCard } from "./repo-card";
-import type { TypedRepo } from "@/lib/orgs";
+import { RepoCard } from "@/components/org/artefact-card";
+import type { TypedRepo } from "@/lib/data/orgs";
 
 type Buckets = {
   project: TypedRepo[];
@@ -36,7 +36,8 @@ export function OrgRepos({
   };
 
   for (const r of repos) {
-    buckets[r.type].push(r);
+    const t = r.type as keyof Buckets; // narrow for safe indexing
+    buckets[t].push(r);
   }
 
   const order: (keyof Buckets)[] = ["project", "product", "material", "standard", "process"];

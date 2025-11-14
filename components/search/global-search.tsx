@@ -19,38 +19,31 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import {
-  Search,
+  Search as SearchIcon,
   Box,
   ScrollText,
+  Layers,
   Puzzle,
   Building2,
-  Store,
-  Layers,
+  Orbit,
+  FolderGit2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// ⬇️ Import your mock data (future: swap for real API without changing this file)
+import type { Scope } from "@/lib/search/types";
 import { MOCK_DATA } from "@/lib/search/mockData";
 
 /* ---------------------------- Scope definitions --------------------------- */
 
-type Scope =
-  | "all"
-  | "standards"
-  | "materials"
-  | "components"
-  | "products"
-  | "companies"
-  | "suppliers";
-
-const SCOPE_META: Record<Scope, { label: string; icon: React.ReactNode }> = {
-  all: { label: "All", icon: <Search className="h-3.5 w-3.5" /> },
+const SCOPE_META: Record<Scope | "all", { label: string; icon: React.ReactNode }> = {
+  all: { label: "All", icon: <SearchIcon className="h-3.5 w-3.5" /> },
   standards: { label: "Standards", icon: <ScrollText className="h-3.5 w-3.5" /> },
   materials: { label: "Materials", icon: <Layers className="h-3.5 w-3.5" /> },
   components: { label: "Components", icon: <Puzzle className="h-3.5 w-3.5" /> },
   products: { label: "Products", icon: <Box className="h-3.5 w-3.5" /> },
-  companies: { label: "Companies", icon: <Building2 className="h-3.5 w-3.5" /> },
-  suppliers: { label: "Suppliers", icon: <Store className="h-3.5 w-3.5" /> },
+  projects: { label: "Projects", icon: <FolderGit2 className="h-3.5 w-3.5" /> },
+  processes: { label: "Processes", icon: <Orbit className="h-3.5 w-3.5" /> },
+  entities: { label: "Entities", icon: <Building2 className="h-3.5 w-3.5" /> },
 };
 
 /* ----------------------------- Suggestion model ---------------------------- */
@@ -63,23 +56,28 @@ type Suggestion = {
   scope: Exclude<Scope, "all">;
 };
 
-// Build suggestions directly from MOCK_DATA so this component stays source-agnostic
+// Build suggestions from MOCK_DATA, mapping products with role=component
+// into the "components" scope for the command palette grouping.
 const SUGGESTIONS: Suggestion[] = MOCK_DATA.map((item) => {
   const entityName = item.entity?.name?.trim();
   const itemSub = (item.subtitle || "").trim();
 
-  // Prefer: "Entity • item.subtitle" → else entity → else item.subtitle → else undefined
   const subtitle =
     entityName && itemSub
       ? `${entityName} • ${itemSub}`
       : entityName || (itemSub || undefined);
+
+  const scope =
+    (item.scope === "products" && item.rawItem?.role === "component"
+      ? "components"
+      : item.scope) as Exclude<Scope, "all">;
 
   return {
     id: item.id,
     title: item.title,
     subtitle,
     href: item.href,
-    scope: item.scope as Exclude<Scope, "all">,
+    scope,
   };
 });
 
@@ -119,7 +117,7 @@ export default function GlobalSearch({
   const router = useRouter();
   const [openScope, setOpenScope] = React.useState(false);
   const [openList, setOpenList] = React.useState(false);
-  const [scope, setScope] = React.useState<Scope>("all");
+  const [scope, setScope] = React.useState<Scope | "all">("all");
   const [value, setValue] = React.useState(defaultQuery);
 
   const inputRef = React.useRef<HTMLInputElement | null>(null);
@@ -129,11 +127,11 @@ export default function GlobalSearch({
     setOpenList(false);
   }
 
-  function submit(q?: string, s?: Scope) {
+  function submit(q?: string, s?: Scope | "all") {
     const raw = q ?? value;
     if (!raw.trim()) return;
     const query = encodeURIComponent(raw);
-    const sc = encodeURIComponent(s ?? scope);
+    const sc = encodeURIComponent((s ?? scope) as string);
     router.push(`/search?q=${query}&scope=${sc}`);
     setOpenList(false);
   }
@@ -161,14 +159,17 @@ export default function GlobalSearch({
   // Compute matches (none when query is empty)
   const matches = React.useMemo(() => {
     const q = value.trim();
+
     const emptyGroups: Record<Exclude<Scope, "all">, Suggestion[]> = {
       standards: [],
       materials: [],
       components: [],
       products: [],
-      companies: [],
-      suppliers: [],
+      projects: [],
+      processes: [],
+      entities: [],
     };
+
     if (!q) return emptyGroups;
 
     const filtered =
@@ -188,9 +189,11 @@ export default function GlobalSearch({
       materials: [],
       components: [],
       products: [],
-      companies: [],
-      suppliers: [],
+      projects: [],
+      processes: [],
+      entities: [],
     };
+
     for (const item of withScores) groups[item.scope].push(item);
     return groups;
   }, [scope, value]);
@@ -263,17 +266,17 @@ export default function GlobalSearch({
             <span className="text-sm">{SCOPE_META[scope].label}</span>
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-44 p-0" align="start">
+        <PopoverContent className="w-56 p-0" align="start">
           <Command>
             <CommandInput placeholder="Filter scope..." />
             <CommandList>
               <CommandEmpty>No scope found.</CommandEmpty>
               <CommandGroup>
-                {(Object.keys(SCOPE_META) as Scope[]).map((k) => (
+                {(Object.keys(SCOPE_META) as Array<Scope | "all">).map((k) => (
                   <CommandItem
                     key={k}
                     onSelect={() => {
-                      setScope(k);
+                      setScope(k as Scope | "all");
                       setOpenScope(false);
                       inputRef.current?.focus();
                       if (value.trim()) setOpenList(true);
@@ -292,10 +295,9 @@ export default function GlobalSearch({
 
       {/* Input + Suggestions */}
       <div className="relative flex w-full items-center">
-        <Search className="pointer-events-none absolute left-3 h-4 w-4 text-muted-foreground" />
+        <SearchIcon className="pointer-events-none absolute left-3 h-4 w-4 text-muted-foreground" />
         <input
           ref={inputRef}
-          id="trace-global-search-input"
           value={value}
           onChange={(e) => {
             const v = e.target.value;
@@ -308,7 +310,7 @@ export default function GlobalSearch({
             if (e.key === "Escape") setOpenList(false);
           }}
           aria-label="Search Trace"
-          placeholder="Search repos, materials, components, products, companies, and suppliers..."
+          placeholder="Search standards, materials, components, products, projects, processes, and entities..."
           className="h-10 w-full rounded-l-none rounded-r-md border bg-background pl-9 pr-20 text-sm outline-none ring-0 focus-visible:border-foreground/30"
         />
         <div className="pointer-events-none absolute right-3 hidden items-center md:flex">
@@ -327,32 +329,13 @@ export default function GlobalSearch({
                   <CommandEmpty>No matches.</CommandEmpty>
                 ) : null}
 
-                {renderGroup("Repos", matches.standards, SCOPE_META.standards.icon)}
-                {renderGroup(
-                  "Materials",
-                  matches.materials,
-                  SCOPE_META.materials.icon
-                )}
-                {renderGroup(
-                  "Components",
-                  matches.components,
-                  SCOPE_META.components.icon
-                )}
-                {renderGroup(
-                  "Products",
-                  matches.products,
-                  SCOPE_META.products.icon
-                )}
-                {renderGroup(
-                  "Companies",
-                  matches.companies,
-                  SCOPE_META.companies.icon
-                )}
-                {renderGroup(
-                  "Suppliers",
-                  matches.suppliers,
-                  SCOPE_META.suppliers.icon
-                )}
+                {renderGroup("Standards", matches.standards, SCOPE_META.standards.icon)}
+                {renderGroup("Materials", matches.materials, SCOPE_META.materials.icon)}
+                {renderGroup("Components", matches.components, SCOPE_META.components.icon)}
+                {renderGroup("Products", matches.products, SCOPE_META.products.icon)}
+                {renderGroup("Projects", matches.projects, SCOPE_META.projects.icon)}
+                {renderGroup("Processes", matches.processes, SCOPE_META.processes.icon)}
+                {renderGroup("Entities", matches.entities, SCOPE_META.entities.icon)}
               </CommandList>
             </Command>
           </div>

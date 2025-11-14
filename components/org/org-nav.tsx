@@ -1,4 +1,4 @@
-//components/org/org-nav.tsx
+// components/org/org-nav.tsx
 "use client";
 
 import Link from "next/link";
@@ -6,14 +6,24 @@ import { usePathname } from "next/navigation";
 
 export function OrgNav({
   owner,
+  active,
   counts,
 }: {
   owner: string;
-  active: "Overview" | "Repositories";
+  active?: "Overview" | "Repositories";
   counts?: { repos?: number };
 }) {
   const pathname = usePathname();
-  const isRepos = pathname?.includes("/orgs/");
+
+  // Decide which tab is active:
+  // 1) Prefer explicit `active` prop (from the page)
+  // 2) Fallback to pathname-based detection
+  const derivedActive: "Overview" | "Repositories" =
+    active ??
+    (pathname === `/${owner}/repositories` ? "Repositories" : "Overview");
+
+  const isOverview = derivedActive === "Overview";
+  const isRepos = derivedActive === "Repositories";
 
   return (
     <nav className="border-b">
@@ -23,7 +33,7 @@ export function OrgNav({
             <Link
               href={`/${owner}`}
               className={`inline-flex items-center gap-2 border-b-2 px-3 py-3 text-sm ${
-                !isRepos
+                isOverview
                   ? "border-foreground"
                   : "border-transparent text-muted-foreground hover:text-foreground"
               }`}
@@ -33,7 +43,7 @@ export function OrgNav({
           </li>
           <li>
             <Link
-              href={`/orgs/${owner}/repositories`}
+              href={`/${owner}/repositories`}
               className={`inline-flex items-center gap-2 border-b-2 px-3 py-3 text-sm ${
                 isRepos
                   ? "border-foreground"

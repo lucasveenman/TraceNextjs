@@ -1,3 +1,4 @@
+//components/org/org-header.tsx
 "use client";
 
 import Link from "next/link";
@@ -17,7 +18,7 @@ type Socials = {
   linkedin?: string;
 };
 
-export function RepoHeader({
+export function OrgHeader({
   owner,
   repo,
   socials,

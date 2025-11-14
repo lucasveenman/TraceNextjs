@@ -1,7 +1,8 @@
 // app/[owner]/page.tsx
-import { RepoHeader } from "@/components/repo/repo-header";
+import { OrgHeader } from "@/components/org/org-header";
 import { OrgNav } from "@/components/org/org-nav";
 import { OrgOverview } from "@/components/org/org-overview";
+import type { OrgData } from "@/lib/data/orgs";
 import { getOrg } from "@/lib/data/orgs";
 
 export default async function OrgPage({
@@ -11,21 +12,21 @@ export default async function OrgPage({
 }) {
   const { owner } = await params;
 
-  const org = getOrg(owner);
-  if (!org) {
-    return (
-      <div className="mx-auto max-w-2xl px-4 py-16">
-        <h1 className="text-xl font-semibold">Organization not found</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The org “{owner}” does not exist in the data library.
-        </p>
-      </div>
-    );
-  }
+  const org = (getOrg(owner) ?? {
+    handle: owner,
+    displayName: owner,
+    bio: "",
+    readme: { title: owner, body: [] },
+    pinnedRepos: [],
+    people: [],
+    sponsors: [],
+    materials: [],
+    tags: [],
+  }) as OrgData;
 
   return (
     <div className="w-full">
-      <RepoHeader
+      <OrgHeader
         owner={owner}
         socials={{
           website: org.website ?? "https://www.example.com",

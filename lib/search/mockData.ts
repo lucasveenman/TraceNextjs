@@ -3,26 +3,6 @@
 import type { SearchEntity, EntityHeader } from "./types";
 
 export const ENTITIES: Record<string, EntityHeader> = {
-  "ent-fuyu": {
-    id: "ent-fuyu",
-    name: "FUYU Technology Co.",
-    type: "company",
-    verified: true,
-    subtitle: "fuyutechnology.com",
-    logoUrl: "https://dummyimage.com/100x100/1f2937/ffffff.png&text=FY",
-    meta: { hq: "Shenzhen, China", founded: 2005, focus: "Linear motion platforms", size: "500+" },
-    stats: { products: 48, repos: 6, followers: 2200, stars: 830 },
-  },
-  "ent-metric": {
-    id: "ent-metric",
-    name: "Metric Labs",
-    type: "company",
-    verified: false,
-    subtitle: "metric.io",
-    logoUrl: "https://dummyimage.com/100x100/374151/ffffff.png&text=ML",
-    meta: { hq: "Berlin, DE", founded: 2018, focus: "Standards & libs", size: "25+" },
-    stats: { repos: 14, followers: 410, stars: 2100 },
-  },
   "ent-apple": {
     id: "ent-apple",
     name: "Apple",
@@ -77,35 +57,61 @@ export const ENTITIES: Record<string, EntityHeader> = {
     meta: { hq: "Cambridge, UK", founded: 2012, focus: "SBCs & modules", size: "500+" },
     stats: { products: 25, repos: 60, followers: 1800000, stars: 64000 },
   },
-  "ent-railcore": {
-    id: "ent-railcore",
-    name: "RailCore",
-    type: "company",
-    verified: true,
-    subtitle: "railcore.org",
-    logoUrl: "https://dummyimage.com/100x100/1f2937/ffffff.png&text=RC",
-    meta: { hq: "Remote", founded: 2017, focus: "CoreXY printers", size: "Open project" },
-    stats: { products: 6, repos: 19, followers: 8200, stars: 9800 },
-  },
-  "ent-precisiondrive": {
-    id: "ent-precisiondrive",
-    name: "PrecisionDrive",
+
+    "ent-metalex": {
+    id: "ent-metalex",
+    name: "Metalex Limited",
     type: "company",
     verified: false,
-    subtitle: "precisiondrive.com",
-    logoUrl: "https://dummyimage.com/100x100/0f172a/ffffff.png&text=PD",
-    meta: { hq: "Austin, TX", founded: 2019, focus: "BLDC motors", size: "40+" },
-    stats: { products: 18, repos: 3, followers: 1200, stars: 260 },
+    subtitle: "metalex.co.uk",
+    logoUrl: "/Raspberry Pi Foundation_idwbF1-REU_0.jpeg",
+    description:
+      "Raspberry Pi Ltd. designs and sells low-cost, high-performance single-board computers for education, makers, and industry.",
+    socials: {
+      website: "https://raspberrypi.com",
+      twitter: "https://twitter.com/raspberrypi",
+      instagram: "https://instagram.com/raspberrypi",
+      linkedin: "https://www.linkedin.com/company/raspberrypi",
+    },
+    meta: { hq: "Cambridge, UK", founded: 2012, focus: "SBCs & modules", size: "500+" },
+    stats: { products: 25, repos: 60, followers: 1800000, stars: 64000 },
   },
-  "ent-transmotec": {
-    id: "ent-transmotec",
-    name: "Transmotec",
-    type: "company",
+
+    "ent-iso": {
+    id: "ent-iso",
+    name: "ISO",
+    type: "organisation",
     verified: true,
-    subtitle: "transmotec.com",
-    logoUrl: "https://dummyimage.com/100x100/1e293b/ffffff.png&text=TM",
-    meta: { hq: "Gothenburg, SE", founded: 2004, focus: "Motors & actuators", size: "120+" },
-    stats: { products: 220, repos: 2, followers: 900, stars: 70 },
+    subtitle: "iso.org",
+    logoUrl: "/images/logos/Icon.jpeg",
+    description:
+      "The International Organization for Standardization is an independent, non-governmental, international standard development organization composed of representatives from the national standards organizations of member countries.[4][5]",
+    socials: {
+      website: "https://iso.org",
+      twitter: "https://twitter.com/isostandards",
+      instagram: "https://www.instagram.com/isostandards",
+      linkedin: "https://www.linkedin.com/company/isostandards",
+    },
+    meta: { hq: "Geneva, CH", founded: 1947, focus: "International standards development", size: "150-200" },
+    stats: { products: 0, repos: 1800, followers: 20000, stars: 14000 },
+  },
+      "ent-aluminum_association": {
+    id: "ent-aluminum_association",
+    name: "Aluminum Association",
+    type: "organisation",
+    verified: true,
+    subtitle: "aluminum.com",
+    logoUrl: "/images/logos/AA.webp",
+    description:
+      "Through the work of our standards team and the Technical Committee on Product Standards (TCPS), the association serves as the major standard setting organization for the global aluminum industry. This includes registering new aluminum alloys and products, managing and updating publications, and more.",
+    socials: {
+      website: "https://aluminum.org",
+      twitter: "https://twitter.com/AluminumNews",
+      instagram: "http://www.instagram.com/aluminumnews",
+      linkedin: "https://www.linkedin.com/company/the-aluminum-association",
+    },
+    meta: { hq: "Arlington, VA", founded: 1935, focus: "Aluminum", size: "10-30" },
+    stats: { products: 0, repos: 12, followers: 2000, stars: 200 },
   },
   "@lucasveenman": {
     id: "@lucasveenman",
@@ -114,120 +120,40 @@ export const ENTITIES: Record<string, EntityHeader> = {
     verified: false,
     subtitle: "@lucasveenman",
     logoUrl: "https://i.pravatar.cc/300",
-    meta: { focus: "Open product repos" },
     stats: { repos: 7, followers: 340, stars: 120 },
   },
 };
 
 export const MOCK_DATA: SearchEntity[] = [
-  // Repos
-  {
-    id: "lps42",
-    title: "LPS-42",
-    subtitle: "product repo",
-    href: "/fuyutechnology/lps-42",
-    scope: "repos",
-    entity: ENTITIES["ent-fuyu"],
-    tags: ["linear", "stage", "repo"],
-    updatedAt: "2025-10-01T12:00:00Z",
-    rawItem: { type: "repo" },
-    stars: 124,
-    images: [
-      "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200&fit=crop",
-      "https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1200&fit=crop",
-    ],
-  },
-  {
-    id: "opensource-glasess",
-    title: "OS-Glasess",
-    subtitle: "Open product repo",
-    href: "/@lucasveenman/os-glasess",
-    scope: "repos",
-    entity: ENTITIES["@lucasveenman"],
-    tags: ["open source", "eyewear", "repo"],
-    updatedAt: "2025-10-01T12:00:00Z",
-    rawItem: { type: "repo" },
-    stars: 58,
-    images: [
-      "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=1200&fit=crop",
-      "https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?q=80&w=1200&fit=crop",
-    ],
-  },
 
   // Standards
+    {
+    id: "iso/iso-7380-1:2022",
+    title: "ISO-7380-1:2022",
+    subtitle: "Button Head Screws • Hexagon Socket",
+    href: "/iso/iso-7380-1:2022",
+    scope: "standards",
+    entity: ENTITIES["ent-iso"],
+    tags: ["bolts", "iso", "standards"],
+    updatedAt: "2022-10-01T12:00:00Z",
+    rawItem: { type: "standard" },
+    stars: 21,
+    images: [
+    ],
+  },
+
   {
-    id: "mat-6061-t6",
+    id: "aluminumassociation/6061-t6",
     title: "Aluminum 6061-T6",
-    subtitle: "Sheet • Plate • Extrusion",
-    href: "/materials/aluminum/6061-t6",
-    scope: "materials",
-    entity: {
-      id: "ent-Aluminum_Association",
-      name: "Aluminum Association",
-      type: "standards",
-      verified: false,
-      subtitle: "aluminum.org",
-      logoUrl: "/images/Aluminum-Association.webp",
-    },
-    tags: ["aluminum", "6061", "t6"],
-    updatedAt: "2025-08-20T12:00:00Z",
-    rawItem: { type: "material" },
-    stars: 79,
-    specs: [
-      { label: "Temper", value: "T6" },
-      { label: "Yield", value: "276 MPa" },
-      { label: "Density", value: "2.70 g/cc" },
-    ],
-    badges: ["standard"],
+    subtitle: "Aluminum • 6061-T6 • Material ",
+    href: "/iso/iso-7380-1:2022",
+    scope: "standards",
+    entity: ENTITIES["ent-aluminum_association"],
+    tags: ["aluminum", "material", "standards"],
+    updatedAt: "2023-10-01T12:00:00Z",
+    rawItem: { type: "standard" },
+    stars: 22,
     images: [
-      "/images/Metal061B.png",
-    ],
-  },
-
-  {
-    id: "iso-7380:2022",
-    title: "ISO-7380:2022",
-    subtitle: "Button head screws • Hexagon socket",
-    href: "/iso/bolts/6061-t6",
-    scope: "components",
-    entity: {
-      id: "ent-ISO",
-      name: "ISO",
-      type: "standards",
-      verified: false,
-      subtitle: "iso.org",
-      logoUrl: "/images/icon.jpeg",
-    },
-    tags: ["bolts", "iso", "iso-7380"],
-    updatedAt: "2025-08-20T12:00:00Z",
-    rawItem: { type: "component" },
-    stars: 79,
-    specs: [
-      { label: "Sizes", value: "M3-M16" },
-      { label: "Grade", value: "A" },
-      { label: "Pitch", value: "Metric Coarse" },
-    ],
-    badges: ["standard"],
-    images: [
-      "/images/DIN-EN-ISO-7380.png",
-    ],
-  },
-
-  // Components
-  {
-    id: "cmp-mgn15-rail",
-    title: "Linear Guide Rail MGNR15 • 1100mm",
-    subtitle: "MGN family",
-    href: "/railcore/mgnr15-1100",
-    scope: "components",
-    entity: ENTITIES["ent-railcore"],
-    tags: ["rail", "mgn", "linear"],
-    updatedAt: "2025-10-04T12:00:00Z",
-    rawItem: { type: "component" },
-    stars: 205,
-    images: [
-      "https://images.unsplash.com/photo-1593011954359-5c1a5a2c8d68?q=80&w=1200&fit=crop",
-      "https://images.unsplash.com/photo-1508898578281-774ac4893bd0?q=80&w=1200&fit=crop",
     ],
   },
 
@@ -236,7 +162,7 @@ export const MOCK_DATA: SearchEntity[] = [
     id: "prd-iphone15",
     title: "iPhone 15 Pro",
     subtitle: "phone by Apple",
-    href: "/apple/iphone-15-pro",
+    href: "/apple/product/iphone-15-pro",
     scope: "products",
     entity: ENTITIES["ent-apple"],
     tags: ["phone", "apple"],
@@ -244,14 +170,14 @@ export const MOCK_DATA: SearchEntity[] = [
     rawItem: { type: "product" },
     stars: 1864,
     images: [
-      "/images/iphone-15.png",
+      "/images/products/iphone-15-pro.png",
     ],
   },
   {
     id: "prd-pi5",
     title: "Raspberry Pi 5",
     subtitle: "Raspberry Pi 5 8GB RAM",
-    href: "/raspberrypi/pi-5-8gb",
+    href: "/raspberrypi/product/pi-5-8gb",
     scope: "products",
     entity: ENTITIES["ent-raspberry"],
     tags: ["raspberry", "sbcs"],
@@ -259,7 +185,29 @@ export const MOCK_DATA: SearchEntity[] = [
     rawItem: { type: "product" },
     stars: 2210,
     images: [
-      "/images/Pi5-nbg.png",
+      "/images/products/raspberrypi-5.png",
+    ],
+  },
+
+  // Components
+
+  // Materials
+
+  // Projects
+
+    {
+    id: "opensource-glasess",
+    title: "OS-Glasess",
+    subtitle: "Open product repo",
+    href: "/@lucasveenman/project/os-glasess",
+    scope: "projects",
+    entity: ENTITIES["@lucasveenman"],
+    tags: ["open source", "eyewear", "repo"],
+    updatedAt: "2025-10-01T12:00:00Z",
+    rawItem: { type: "project" },
+    stars: 58,
+    images: [
+      "/images/products/glasess.png",
     ],
   },
 ];
