@@ -1,10 +1,10 @@
-// components/org/org-sidebar.tsx
+// components/entity/entity-sidebar.tsx
 "use client";
 
 import { Users, AtSign, Globe, MapPin } from "lucide-react";
-import type { OrgData } from "@/lib/data/orgs";
+import type { EntityData } from "@/lib/data/entities";
 
-export function OrgSidebar({ org }: { org: OrgData }) {
+export function EntitySidebar({ org }: { org: EntityData }) {
   return (
     <div className="space-y-6">
       {/* Profile card */}

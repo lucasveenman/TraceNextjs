@@ -1,6 +1,6 @@
 // lib/search/mockData.ts
 import type { SearchEntity, EntityHeader } from "./types";
-import { getOrg } from "@/lib/data/orgs";
+import { getEntity } from "@/lib/data/entities";
 
 function buildEntityFromOrg(
   id: string,
@@ -10,7 +10,7 @@ function buildEntityFromOrg(
     "type" | "verified" | "subtitle" | "logoUrl" | "description" | "socials" | "meta" | "stats"
   >,
 ): EntityHeader {
-  const org = getOrg(handle);
+  const org = getEntity(handle);
   if (!org) {
     throw new Error(`Org "${handle}" not found for entity "${id}"`);
   }

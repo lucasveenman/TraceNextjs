@@ -1,18 +1,18 @@
-// components/org/org-overview.tsx
+// components/entity/entity-overview.tsx
 "use client";
 
-import { OrgReadme } from "./org-readme";
-import { OrgSidebar } from "./org-sidebar";
-import type { OrgData } from "@/lib/data/orgs";
-import { buildRepoHref } from "@/lib/data/orgs";
+import { EntityReadme } from "./entity-readme";
+import { EntitySidebar } from "./entity-sidebar";
+import type { EntityData } from "@/lib/data/entities";
+import { buildRepoHref } from "@/lib/data/entities";
 
-export function OrgOverview({ org }: { org: OrgData }) {
+export function EntityOverview({ org }: { org: EntityData }) {
   const hasPinned = org.pinnedRepos.length > 0;
 
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
       <div className="lg:col-span-2 space-y-8">
-        <OrgReadme org={org} />
+        <EntityReadme org={org} />
 
         <section>
           <div className="mb-3 flex items-center justify-between">
@@ -64,7 +64,7 @@ export function OrgOverview({ org }: { org: OrgData }) {
       </div>
 
       <div className="lg:col-span-1">
-        <OrgSidebar org={org} />
+        <EntitySidebar org={org} />
       </div>
     </div>
   );

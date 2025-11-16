@@ -1,4 +1,4 @@
-// lib/data/orgs.ts
+// lib/data/entities.ts
 export type TypedRepo = {
   name: string;
   type: "project" | "product" | "material" | "standard" | "process";
@@ -7,28 +7,28 @@ export type TypedRepo = {
   updatedAt?: string;
 };
 
-export type OrgSocials = {
+export type EntitySocials = {
   website?: string;
   twitter?: string;
   instagram?: string;
   linkedin?: string;
 };
 
-export type OrgMeta = {
+export type EntityMeta = {
   hq?: string;
   founded?: number;
   focus?: string;
   size?: string;
 };
 
-export type OrgStats = {
+export type EntityStats = {
   products?: number;
   repos?: number;
   followers?: number;
   stars?: number;
 };
 
-export type OrgData = {
+export type EntityData = {
   handle: string;
   displayName: string;
   bio: string;
@@ -52,9 +52,9 @@ export type OrgData = {
   entityType?: "company" | "organisation" | "user";
   verified?: boolean;
   logoUrl?: string;
-  socials?: OrgSocials;
-  meta?: OrgMeta;
-  stats?: OrgStats;
+  socials?: EntitySocials;
+  meta?: EntityMeta;
+  stats?: EntityStats;
 };
 
 export function buildRepoHref(owner: string, repo: TypedRepo) {
@@ -62,7 +62,7 @@ export function buildRepoHref(owner: string, repo: TypedRepo) {
 }
 
 // ---- In-memory demo data + helpers ----
-const demoData: Record<string, OrgData> = {
+const demoData: Record<string, EntityData> = {
   iso: {
     handle: "iso",
     displayName: "ISO",
@@ -357,12 +357,12 @@ const demoData: Record<string, OrgData> = {
   },
 };
 
-export function getOrg(handle: string): OrgData | null {
+export function getEntity(handle: string): EntityData | null {
   const key = handle.toLowerCase();
   return demoData[key] ?? null;
 }
 
 export function getReposForOwner(handle: string): TypedRepo[] {
-  const org = getOrg(handle);
+  const org = getEntity(handle);
   return org?.pinnedRepos ?? [];
 }

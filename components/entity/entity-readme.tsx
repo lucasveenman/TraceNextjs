@@ -1,11 +1,11 @@
-// components/org/org-readme.tsx
+// components/entity/entity-readme.tsx
 "use client";
 
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { OrgData } from "@/lib/data/orgs";
+import type { EntityData } from "@/lib/data/entities";
 
-export function OrgReadme({ org }: { org: OrgData }) {
+export function EntityReadme({ org }: { org: EntityData }) {
   const { readme } = org;
 
   

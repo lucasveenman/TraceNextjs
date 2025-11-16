@@ -22,7 +22,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        // @ts-expect-error custom field from Prisma model
         token.userId = user.id;
         // @ts-expect-error custom field from Prisma model
         token.handle = user.handle ?? null;

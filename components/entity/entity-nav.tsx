@@ -1,10 +1,10 @@
-// components/org/org-nav.tsx
+// components/entity/entity-nav.tsx
 "use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export function OrgNav({
+export function EntityNav({
   owner,
   active,
   counts,

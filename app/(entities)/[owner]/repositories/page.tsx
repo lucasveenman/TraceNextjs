@@ -1,7 +1,7 @@
 import { OrgHeader } from "@/components/org/org-header";
 import { OrgNav } from "@/components/org/org-nav";
 import { OrgRepos } from "@/components/org/org-repos";
-import { getOrg, getReposForOwner, type TypedRepo } from "@/lib/data/orgs";
+import { getOrg, getReposForOwner, type TypedRepo } from "@/lib/data/entities";
 
 export default async function OrgReposPage({
   params,

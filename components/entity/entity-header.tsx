@@ -1,4 +1,4 @@
-// components/org/org-header.tsx
+// components/entity/entity-header.tsx
 "use client";
 
 import Link from "next/link";
@@ -11,7 +11,7 @@ import {
   Boxes,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getOrg } from "@/lib/data/orgs";
+import { getEntity } from "@/lib/data/entities";
 
 type Socials = {
   website?: string;
@@ -22,7 +22,7 @@ type Socials = {
 
 type HeaderType = "project" | "product" | "material" | "standard" | "process";
 
-export function OrgHeader({
+export function EntityHeader({
   owner,
   repo,
   type,
@@ -33,7 +33,7 @@ export function OrgHeader({
   type?: HeaderType;
   socials?: Socials;
 }) {
-  const org = getOrg(owner);
+  const org = getEntity(owner);
   const showRepo = Boolean(repo);
 
   const displayName = org?.displayName ?? owner;

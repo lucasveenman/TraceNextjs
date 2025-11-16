@@ -2,7 +2,7 @@
 "use client";
 
 import { RepoCard } from "./artefact-card";
-import type { TypedRepo } from "@/lib/data/orgs";
+import type { TypedRepo } from "@/lib/data/entities";
 
 type Buckets = {
   project: TypedRepo[];
